@@ -54,7 +54,7 @@ export function ExpensesPage() {
           <Typography variant="h5" gutterBottom>
             Team Expenses
           </Typography>
-          <Typography color="text.secondary" paragraph>
+          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
             Track spending and split payments for match events and club costs.
           </Typography>
           <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, overflow: 'hidden' }}>

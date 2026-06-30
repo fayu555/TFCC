@@ -98,6 +98,8 @@ export function UmpirePage() {
   const canAutoAssignAll = remainingMatches.length > 0 && remainingUmpires.length >= remainingMatches.length * 2
   const canAssignSingleMatch = remainingUmpires.length >= 2
 
+  const isMatchAssigned = (matchId: string) => assignments.some((item) => item.matchId === matchId)
+
   const pickTwoRandom = (players: Player[]) => {
     const pool = [...players]
     const firstIndex = Math.floor(Math.random() * pool.length)
@@ -152,7 +154,7 @@ export function UmpirePage() {
           <Typography variant="h5" gutterBottom>
             Umpire Schedule
           </Typography>
-          <Typography color="text.secondary" paragraph>
+          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
             Add matches manually, then auto-assign two distinct umpires for each match.
           </Typography>
           <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden' }}>
@@ -194,7 +196,6 @@ export function UmpirePage() {
               fullWidth
               type="date"
               label="Date"
-              InputLabelProps={{ shrink: true }}
               value={scheduleForm.date}
               onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
             />
@@ -208,7 +209,6 @@ export function UmpirePage() {
               fullWidth
               type="time"
               label="Time"
-              InputLabelProps={{ shrink: true }}
               value={scheduleForm.time}
               onChange={(e) => setScheduleForm({ ...scheduleForm, time: e.target.value })}
             />
@@ -242,7 +242,7 @@ export function UmpirePage() {
           <Typography variant="h5" gutterBottom>
             Auto-assign Umpires
           </Typography>
-          <Typography color="text.secondary" paragraph>
+          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
             Assign two unique umpires per match from the full team roster. No player is repeated across the current assignments.
           </Typography>
           <Typography sx={{ mb: 2 }}>
