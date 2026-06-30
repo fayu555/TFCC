@@ -258,10 +258,22 @@ button {
   cursor: not-allowed;
 }
 
-.button.secondary {
+.button-secondary,
+.button.button-secondary {
   background: #e2e8f0;
   color: #0f172a;
   box-shadow: none;
+}
+
+.field {
+  margin-bottom: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.field label {
+  font-weight: 600;
+  color: #334155;
 }
 
 .form-grid {

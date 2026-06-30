@@ -1,3 +1,4 @@
+import './App.css'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
 import { ExpensesPage } from './pages/ExpensesPage'
