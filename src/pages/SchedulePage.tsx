@@ -42,7 +42,7 @@ export function SchedulePage() {
           <Typography variant="h5" gutterBottom>
             Match Schedule
           </Typography>
-          <Typography color="text.secondary" paragraph>
+          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
             View and add upcoming fixtures for the season.
           </Typography>
           <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, overflow: 'hidden' }}>
