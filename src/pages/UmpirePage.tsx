@@ -1,20 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material'
 
 type Match = {
   id: string
@@ -148,162 +132,199 @@ export function UmpirePage() {
   }
 
   return (
-    <Stack spacing={3}>
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Umpire Schedule
-          </Typography>
-          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
-            Add matches manually, then auto-assign two distinct umpires for each match.
-          </Typography>
-          <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Match</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Assigned To</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {assignments.map((item) => (
-                  <TableRow key={item.id} hover>
-                    <TableCell>{item.match}</TableCell>
-                    <TableCell>{item.date}</TableCell>
-                    <TableCell>{item.assignedTo}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
+    <div className="page page--umpire">
+      <div className="page-header">
+        <div>
+          <p className="eyebrow">Umpires</p>
+          <h1 className="page-title">Umpire assignments</h1>
+          <p className="page-subtitle">Track match assignments and pick two available umpires for every fixture.</p>
+        </div>
+      </div>
 
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Add Match
-          </Typography>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              label="Opponent"
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Umpire schedule</h2>
+            <p className="text-muted">Review current umpires and assignment history.</p>
+          </div>
+        </div>
+        <div className="table-wrapper">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Match</th>
+                <th>Date</th>
+                <th>Assigned to</th>
+              </tr>
+            </thead>
+            <tbody>
+              {assignments.length === 0 ? (
+                <tr>
+                  <td colSpan={3} style={{ padding: '18px 14px', textAlign: 'center' }}>
+                    No umpires assigned yet.
+                  </td>
+                </tr>
+              ) : (
+                assignments.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.match}</td>
+                    <td>{item.date}</td>
+                    <td>{item.assignedTo}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Add match</h2>
+            <p className="text-muted">Create a new match so the captain can assign umpires later.</p>
+          </div>
+        </div>
+
+        <div className="form-grid">
+          <label className="input-group">
+            <span className="input-label">Opponent</span>
+            <input
+              className="input-field"
               value={scheduleForm.opponent}
               onChange={(e) => setScheduleForm({ ...scheduleForm, opponent: e.target.value })}
+              placeholder="Opponent name"
             />
-            <TextField
-              fullWidth
+          </label>
+          <label className="input-group">
+            <span className="input-label">Date</span>
+            <input
+              className="input-field"
               type="date"
-              label="Date"
               value={scheduleForm.date}
               onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
             />
-            <TextField
-              fullWidth
-              label="Location"
+          </label>
+          <label className="input-group">
+            <span className="input-label">Location</span>
+            <input
+              className="input-field"
               value={scheduleForm.location}
               onChange={(e) => setScheduleForm({ ...scheduleForm, location: e.target.value })}
+              placeholder="Venue"
             />
-            <TextField
-              fullWidth
+          </label>
+          <label className="input-group">
+            <span className="input-label">Time</span>
+            <input
+              className="input-field"
               type="time"
-              label="Time"
               value={scheduleForm.time}
               onChange={(e) => setScheduleForm({ ...scheduleForm, time: e.target.value })}
             />
-          </Stack>
-          <Box sx={{ mt: 3 }}>
-            <Button
-              variant="contained"
-              disabled={!canAddSchedule}
-              onClick={() => {
-                setSchedule((current) => [
-                  ...current,
-                  {
-                    id: crypto.randomUUID(),
-                    opponent: scheduleForm.opponent,
-                    date: scheduleForm.date,
-                    location: scheduleForm.location,
-                    time: scheduleForm.time,
-                  },
-                ])
-                setScheduleForm({ opponent: '', date: '', location: '', time: '' })
-              }}
-            >
-              Save Match
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
+          </label>
+        </div>
 
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Auto-assign Umpires
-          </Typography>
-          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
-            Assign two unique umpires per match from the full team roster. No player is repeated across the current assignments.
-          </Typography>
-          <Typography sx={{ mb: 2 }}>
-            {remainingMatches.length} unassigned match(es), {remainingUmpires.length} available umpire(s)
-          </Typography>
-          <Button
-            variant="contained"
-            disabled={!canAutoAssignAll}
-            onClick={assignAutoForAll}
-            sx={{ mr: 2 }}
+        <div className="card-actions">
+          <button
+            className="button"
+            type="button"
+            disabled={!canAddSchedule}
+            onClick={() => {
+              setSchedule((current) => [
+                ...current,
+                {
+                  id: crypto.randomUUID(),
+                  opponent: scheduleForm.opponent,
+                  date: scheduleForm.date,
+                  location: scheduleForm.location,
+                  time: scheduleForm.time,
+                },
+              ])
+              setScheduleForm({ opponent: '', date: '', location: '', time: '' })
+            }}
           >
-            Auto-assign all remaining matches
-          </Button>
-          <Typography color="error" sx={{ mt: 1 }}>
-            {remainingMatches.length > 0 && remainingUmpires.length < remainingMatches.length * 2
-              ? 'Not enough available umpires for all remaining matches.'
-              : ''}
-          </Typography>
-        </CardContent>
-      </Card>
+            Save match
+          </button>
+        </div>
+      </section>
 
-      <Card elevation={3}> 
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Scheduled Matches
-          </Typography>
-          <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Opponent</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {schedule.map((match) => (
-                  <TableRow key={match.id} hover>
-                    <TableCell>{match.opponent}</TableCell>
-                    <TableCell>{match.date}</TableCell>
-                    <TableCell>{match.location}</TableCell>
-                    <TableCell>{match.time}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outlined"
-                        size="small"
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Auto-assign umpires</h2>
+            <p className="text-muted">Automatically select two different umpires for each pending match.</p>
+          </div>
+        </div>
+
+        <div className="stats-grid" style={{ marginBottom: '18px' }}>
+          <div className="stat-card">
+            <strong>{remainingMatches.length}</strong>
+            <span>unassigned matches</span>
+          </div>
+          <div className="stat-card">
+            <strong>{remainingUmpires.length}</strong>
+            <span>available umpires</span>
+          </div>
+        </div>
+
+        <button className="button" type="button" disabled={!canAutoAssignAll} onClick={assignAutoForAll}>
+          Auto-assign all remaining matches
+        </button>
+        {remainingMatches.length > 0 && remainingUmpires.length < remainingMatches.length * 2 && (
+          <p className="alert">Not enough available umpires for all remaining matches.</p>
+        )}
+      </section>
+
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Scheduled matches</h2>
+            <p className="text-muted">Assign umpires per match when the roster is ready.</p>
+          </div>
+        </div>
+        <div className="table-wrapper">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Opponent</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {schedule.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ padding: '18px 14px', textAlign: 'center' }}>
+                    No scheduled matches yet.
+                  </td>
+                </tr>
+              ) : (
+                schedule.map((match) => (
+                  <tr key={match.id}>
+                    <td>{match.opponent}</td>
+                    <td>{match.date}</td>
+                    <td>{match.location}</td>
+                    <td>{match.time}</td>
+                    <td>
+                      <button
+                        className="button button-secondary"
+                        type="button"
                         disabled={isMatchAssigned(match.id) || !canAssignSingleMatch}
                         onClick={() => assignAutoForMatch(match)}
                       >
                         Assign random umpires
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
-    </Stack>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   )
 }

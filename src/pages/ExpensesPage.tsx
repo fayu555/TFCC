@@ -1,20 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material'
 
 type Expense = {
   id: string
@@ -25,8 +9,7 @@ type Expense = {
   date: string
 }
 
-const initialExpenses: Expense[] = [
-]
+const initialExpenses: Expense[] = []
 
 export function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>(() => {
@@ -38,6 +21,7 @@ export function ExpensesPage() {
       return initialExpenses
     }
   })
+
   const [form, setForm] = useState({ description: '', amount: '', payer: '', splitBetween: '1', date: '' })
 
   useEffect(() => {
@@ -48,85 +32,128 @@ export function ExpensesPage() {
   const canAdd = Boolean(form.description && form.amount && form.payer && form.date)
 
   return (
-    <Stack spacing={3}>
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Team Expenses
-          </Typography>
-          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
-            Track spending and split payments for match events and club costs.
-          </Typography>
-          <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Payer</TableCell>
-                  <TableCell>Split</TableCell>
-                  <TableCell>Date</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {expenses.map((expense) => (
-                  <TableRow key={expense.id} hover>
-                    <TableCell>{expense.description}</TableCell>
-                    <TableCell>${expense.amount.toFixed(0)}</TableCell>
-                    <TableCell>{expense.payer}</TableCell>
-                    <TableCell>{expense.splitBetween} people</TableCell>
-                    <TableCell>{expense.date}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Typography sx={{ mt: 2, fontWeight: 700 }}>Total spent: ${total.toFixed(0)}</Typography>
-        </CardContent>
-      </Card>
+    <div className="page page--expenses">
+      <div className="page-header">
+        <div>
+          <p className="eyebrow">Team</p>
+          <h1 className="page-title">Team Expenses</h1>
+          <p className="page-subtitle">Track spending and split payments for match events and club costs.</p>
+        </div>
+        <div className="summary-card">
+          <span>Total spent</span>
+          <strong>${total.toFixed(0)}</strong>
+        </div>
+      </div>
 
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Add Expense
-          </Typography>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              label="Description"
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Expense history</h2>
+            <p className="text-muted">Review payments and shared costs for every fixture.</p>
+          </div>
+        </div>
+        <div className="table-wrapper">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Payer</th>
+                <th>Split</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {expenses.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ padding: '18px 14px', textAlign: 'center' }}>
+                    No expenses recorded yet.
+                  </td>
+                </tr>
+              ) : (
+                expenses.map((expense) => (
+                  <tr key={expense.id}>
+                    <td>{expense.description}</td>
+                    <td>${expense.amount.toFixed(0)}</td>
+                    <td>{expense.payer}</td>
+                    <td>{expense.splitBetween} people</td>
+                    <td>{expense.date}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Add Expense</h2>
+            <p className="text-muted">Record a new expense for match day spending.</p>
+          </div>
+        </div>
+
+        <div className="form-grid">
+          <label className="input-group">
+            <span className="input-label">Description</span>
+            <input
+              className="input-field"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
+              placeholder="What was purchased?"
             />
-            <TextField
-              fullWidth
-              label="Amount"
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Amount</span>
+            <input
+              className="input-field"
               type="number"
               value={form.amount}
               onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              placeholder="0"
             />
-            <TextField
-              fullWidth
-              label="Payer"
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Payer</span>
+            <input
+              className="input-field"
               value={form.payer}
               onChange={(e) => setForm({ ...form, payer: e.target.value })}
+              placeholder="Name"
             />
-            <TextField
-              fullWidth
-              label="Split Between"
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Split Between</span>
+            <input
+              className="input-field"
               type="number"
               value={form.splitBetween}
               onChange={(e) => setForm({ ...form, splitBetween: e.target.value })}
+              placeholder="1"
             />
-            <TextField
-              fullWidth
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Date</span>
+            <input
+              className="input-field"
               type="date"
-              label="Date"
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
             />
-          </Stack>
-          <Box sx={{ mt: 3 }}>
-            <Button variant="contained" disabled={!canAdd} onClick={() => {
+          </label>
+        </div>
+
+        <div className="card-actions">
+          <button
+            className="button"
+            type="button"
+            disabled={!canAdd}
+            onClick={() => {
               setExpenses((current) => [
                 ...current,
                 {
@@ -139,12 +166,12 @@ export function ExpensesPage() {
                 },
               ])
               setForm({ description: '', amount: '', payer: '', splitBetween: '1', date: '' })
-            }}>
-              Add Expense
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
-    </Stack>
+            }}
+          >
+            Add expense
+          </button>
+        </div>
+      </section>
+    </div>
   )
 }

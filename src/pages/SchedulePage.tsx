@@ -1,20 +1,4 @@
 import { useState } from 'react'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-  Paper,
-} from '@mui/material'
 
 type Match = {
   id: string
@@ -26,7 +10,6 @@ type Match = {
 
 const initialMatches: Match[] = [
   { id: '1', opponent: 'Rare-HT', date: '2026-28-06', location: 'River Forest Park, Durham', time: '5:00 PM' },
-
 ]
 
 export function SchedulePage() {
@@ -36,85 +19,122 @@ export function SchedulePage() {
   const canAdd = Boolean(form.opponent && form.date && form.location && form.time)
 
   return (
-    <Stack spacing={3}>
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Match Schedule
-          </Typography>
-          <Typography component="p" color="text.secondary" sx={{ mb: 2 }}>
-            View and add upcoming fixtures for the season.
-          </Typography>
-          <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Opponent</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Time</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {matches.map((match) => (
-                  <TableRow key={match.id} hover>
-                    <TableCell>{match.opponent}</TableCell>
-                    <TableCell>{match.date}</TableCell>
-                    <TableCell>{match.location}</TableCell>
-                    <TableCell>{match.time}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
+    <div className="page page--schedule">
+      <div className="page-header">
+        <div>
+          <p className="eyebrow">Schedule</p>
+          <h1 className="page-title">Match schedule</h1>
+          <p className="page-subtitle">View and add upcoming fixtures for the season.</p>
+        </div>
+      </div>
 
-      <Card elevation={3}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Add a Match
-          </Typography>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              label="Opponent"
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Upcoming matches</h2>
+            <p className="text-muted">Keep the team informed on dates, locations, and match times.</p>
+          </div>
+        </div>
+
+        <div className="table-wrapper">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Opponent</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {matches.length === 0 ? (
+                <tr>
+                  <td colSpan={4} style={{ padding: '18px 14px', textAlign: 'center' }}>
+                    No matches added yet.
+                  </td>
+                </tr>
+              ) : (
+                matches.map((match) => (
+                  <tr key={match.id}>
+                    <td>{match.opponent}</td>
+                    <td>{match.date}</td>
+                    <td>{match.location}</td>
+                    <td>{match.time}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="card">
+        <div className="section-head">
+          <div>
+            <h2>Add a match</h2>
+            <p className="text-muted">Schedule the next fixture and share it with the team.</p>
+          </div>
+        </div>
+
+        <div className="form-grid">
+          <label className="input-group">
+            <span className="input-label">Opponent</span>
+            <input
+              className="input-field"
               value={form.opponent}
               onChange={(e) => setForm({ ...form, opponent: e.target.value })}
+              placeholder="Opponent name"
             />
-            <TextField
-              fullWidth
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Date</span>
+            <input
+              className="input-field"
               type="date"
-              label="Date"
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
             />
-            <TextField
-              fullWidth
-              label="Location"
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Location</span>
+            <input
+              className="input-field"
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
+              placeholder="Match venue"
             />
-            <TextField
-              fullWidth
-              label="Time"
+          </label>
+
+          <label className="input-group">
+            <span className="input-label">Time</span>
+            <input
+              className="input-field"
+              type="time"
               value={form.time}
               onChange={(e) => setForm({ ...form, time: e.target.value })}
             />
-          </Stack>
-          <Box sx={{ mt: 3 }}>
-            <Button variant="contained" disabled={!canAdd} onClick={() => {
+          </label>
+        </div>
+
+        <div className="card-actions">
+          <button
+            className="button"
+            type="button"
+            disabled={!canAdd}
+            onClick={() => {
               setMatches((current) => [
                 ...current,
                 { id: crypto.randomUUID(), opponent: form.opponent, date: form.date, location: form.location, time: form.time },
               ])
               setForm({ opponent: '', date: '', location: '', time: '' })
-            }}>
-              Add Match
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
-    </Stack>
+            }}
+          >
+            Add match
+          </button>
+        </div>
+      </section>
+    </div>
   )
 }
