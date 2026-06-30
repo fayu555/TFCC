@@ -20,7 +20,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </button>
         <div className="topbar__brand">
           <p className="eyebrow">The Force Cricket Club</p>
-          <p className="title">Club manager for mobile and tablet</p>
+          <p className="title">TFCC Management</p>
         </div>
       </header>
 
@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div>
             <p className="eyebrow">Team</p>
             <h2>TFCC</h2>
-            <p className="text-muted">Manage schedule, expenses, availability, gallery, and umpires from any screen.</p>
+            <p className="text-muted">Lets build the legacy!</p>
           </div>
           <button className="sidebar__close" type="button" onClick={() => setDrawerOpen(false)}>
             ×
